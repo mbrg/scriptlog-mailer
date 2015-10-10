@@ -1,5 +1,5 @@
 # scriptlog-malier
-Runs a command line script, emails recipients when completed/errored with console contant
+Runs a command line script, emails recipients when completed/failed with console contant
 
 Run python scriptLog-mailer.py -h for help.
 
