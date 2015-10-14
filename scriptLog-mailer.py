@@ -28,7 +28,7 @@ def send_mail(user, passwd, send_to, subject, content, attachments=None, host="s
         with open(a, "rb") as fil:
             msg.attach(MIMEApplication(
                 fil.read(),
-                Content_Disposition='attachment; filename="%s.txt"' % os.path.basename(a),
+                Content_Disposition='attachment; filename="%s"' % os.path.basename(a),
                 Name=os.path.basename(a)
             ))
     smtp = smtplib.SMTP(host, port)
@@ -50,6 +50,8 @@ def main(argv):
     parser.add_argument('-l', "--logs_in_message", action='store_true', default=False, help='Send logs as email conent, not as a attachment')
     parser.add_argument('-e', "--encrypt", action='store_true', default=False, help='Force using TLS')
     args = parser.parse_args()
+
+    os.chdir(os.path.dirname(os.path.realpath(__file__)))  # change active dir
 
     # Assetions
     short_name = args.script_name if args.script_name else args.script
@@ -87,16 +89,21 @@ def main(argv):
         #html_content = html_content.replace('</body></html>','<p>%s</p></body></html>' % out)
         fname = None
     else:
-        f = tempfile.NamedTemporaryFile(delete=False)
+        fname = 'log.txt'  # Create tmp file
+        while True:
+            if os.path.isfile(fname):
+                fname = '%s(1).txt' % fname.split('.')[0]
+            else:
+                break
+        f = open(fname, 'a')
         f.write(out)
-        fname = [f.name]
         f.close()
     send_mail(user=args.email_user,
               passwd=args.email_passwd,
               send_to=args.recipients, 
               subject=text_subject, 
               content=text_content, 
-              attachments=fname, 
+              attachments=[fname], 
               host=args.email_host, 
               force_tls=args.encrypt)
     if fname: os.remove(fname)  # Delete tmp file
