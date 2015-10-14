@@ -63,8 +63,8 @@ def main(argv):
                      stdout=subprocess.PIPE,
                      stderr=subprocess.PIPE,
                      )
-    end_time = datetime.datetime.now()
     out, err = p.communicate()
+    end_time = datetime.datetime.now()
 
     # Mail results
     if err=='':
