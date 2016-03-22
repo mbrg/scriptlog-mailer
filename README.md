@@ -6,7 +6,7 @@ Run python scriptLog-mailer.py -h for help.
 
 Usage example:
 ```
-cd /script_location/
+cd \script_location\
 python scriptLog-mailer.py \
 	-s "python script.py" \
 	-ho smtp.gmail.com -po 587 -e \
